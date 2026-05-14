@@ -388,4 +388,4 @@
 Figma：<https://www.figma.com/design/cTod8i2oPgD4nK0kyXq1bT/Satto-Photo_%E7%94%BB%E9%9D%A2%E9%81%B7%E7%A7%BB%E5%9B%B3?node-id=0-1&t=GHWLdlR9bRFGbcTV-1>
 
 ### ER図
-drawio：<https://drive.google.com/file/d/18D3S8Vm_9tfd7pSEzkP0GM_dIo5aWV_O/view>
+drawio：<https://drive.google.com/file/d/18D3S8Vm_9tfd7pSEzkP0GM_dIo5aWV_O/view?usp=sharing>
