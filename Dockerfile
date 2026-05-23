@@ -30,12 +30,12 @@ RUN mkdir /app
 WORKDIR /app
 
 # ソースコードを書き換えるたびに bundle install させないため
-# COPY Gemfile Gemfile.lock /app/
-# RUN bundle install
+COPY Gemfile Gemfile.lock /app/
+RUN bundle install
 
 # ソースコードを書き換えるたびに yarn install させないため
-# COPY package.json yarn.lock /app/
-# RUN yarn install --frozen-lockfile
+COPY package.json yarn.lock /app/
+RUN yarn install --frozen-lockfile
 
 # Bundlerのインストール
 RUN gem install bundler
