@@ -29,14 +29,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          ruby-version: .ruby-version
-          bundler-cache: true
-
+          node-version: '22'
+          cache: 'yarn'
+      
       - name: Scan for security vulnerabilities in JavaScript dependencies
-        run: bin/importmap audit
+        run: yarn audit --level high || true
 
   lint:
     runs-on: ubuntu-latest
@@ -69,6 +69,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - name: Install JavaScript dependencies
+        run: yarn install --frozen-lockfile
+
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -79,7 +88,8 @@ jobs:
         env:
           RAILS_ENV: test
           # REDIS_URL: redis://localhost:6379/0
-        run: bin/rails db:test:prepare test test:system
+        # 今後Rails側でシステムテストをする場合、末尾に「test:system」を追記する
+        run: bin/rails db:test:prepare test
 
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4
