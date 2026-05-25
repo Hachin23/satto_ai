@@ -5,7 +5,7 @@
 <template>
   <footer class="w-full bg-white border-t border-slate-200 py-2 flex justify-around text-xs">
     <button
-      @click="$router.push('/top')" 
+      @click="$router.push('/')" 
       class="flex flex-col items-center gap-1 text-slate-900">
       <HouseIcon class="text-lg" />
       <span>ホーム</span>
