@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: satto-photo
+    runtime: ruby
+    plan: free # Webサーバーを無料に固定
+    buildCommand: "./bin/render-build.sh"
+    startCommand: "bundle exec rails server"
+    envVars: 
+      # アセットビルドを通すためのダミー設定
+      - key: DATABASE_URL
+        value: "sqlite3::memory:"
+      - key: RAILS_MASTER_KEY
+        sync: false
+      - key: NODE_VERSION
+        # 使用しているNodeのバージョンに合わせる
+        value: "22.22.2" 
