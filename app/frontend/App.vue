@@ -1,6 +1,8 @@
 <script setup lang="ts">
-  import { RouterView } from 'vue-router'
-  import AppFooter from '@/components/AppFooter.vue'
+import { RouterView, useRoute } from 'vue-router'
+import AppFooter from '@/components/AppFooter.vue'
+
+const route = useRoute()  
 </script>
 
 <template>
@@ -8,6 +10,6 @@
     <main class="flex-1 w-full overflow-y-auto">
       <RouterView />
     </main>
-    <AppFooter />
+    <AppFooter v-if="!route.meta.hideFooter"/>
   </div>
 </template>

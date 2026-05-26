@@ -13,7 +13,8 @@ const routes = [
   {
     path: '/camera',
     name: 'camera',
-    component: CameraView
+    component: CameraView,
+    meta: { hideFooter: true }
   },
   {
     path: '/history',
