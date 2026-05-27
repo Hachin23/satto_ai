@@ -3,6 +3,7 @@ import TopView from '../views/TopView.vue'
 import CameraView from '../views/CameraView.vue'
 import HistoryView from '../views/HistoryView.vue'
 import SettingsView from '../views/SettingsView.vue'
+import ResultPreviewView from '../views/ResultPreviewView.vue'
 
 const routes = [
   {
@@ -25,7 +26,13 @@ const routes = [
     path: '/settings',
     name: 'settings',
     component: SettingsView
-  }
+  },
+  {
+    path: '/result-preview',
+    name: 'result-preview',
+    component: ResultPreviewView,
+    meta: { hideFooter: true }
+  },
 ]
 
 const router = createRouter({

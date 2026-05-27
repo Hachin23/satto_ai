@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { usePhotoStore } from '@/stores/photo'
+import { CircleX } from 'lucide-vue-next'
 
 import AppHeader from '@/components/AppHeader.vue'
 import CameraModule from '@/components/CameraModule.vue'
@@ -8,6 +10,7 @@ import CameraModule from '@/components/CameraModule.vue'
 import { useCamera } from '@/composables/useCamera'
 
 const router = useRouter()
+const photoStore = usePhotoStore()
 
 const cameraRefs = {
   video: ref<HTMLVideoElement | null>(null),
@@ -35,7 +38,10 @@ const handleCapture = async () => {
     
     if (capturedBlob) {
       console.log("📸 撮影成功:", capturedBlob)
-      // 撮影画像を次の画面に渡す
+      // 撮影データをストアに保存
+      photoStore.capturedBlob = capturedBlob
+      // 撮影結果プレビュー画面へ遷移
+      router.push('/result-preview')
     }
   } catch(error) {
     console.error("撮影失敗:", error)
@@ -46,12 +52,13 @@ const handleCapture = async () => {
 </script>
 
 <template>
-  <div class="flex flex-col h-screen w-full bg-black text-white p-4">
+  <div class="flex flex-col h-screen w-full bg-black text-white pt-4">
     <AppHeader
       bgColor="bg-black" 
       borderClass="border-none"
+      textColor="text-white"
     >
-      <button @click="router.back()">✕</button>
+      <CircleX @click="router.back()" :size="24"/>
       <button @click="toggleFlash" :class="{ 'text-yellow-400': isFlashOn }">
         {{ isFlashOn ? '⚡️ ON' : '⚡️ OFF' }}
       </button>
