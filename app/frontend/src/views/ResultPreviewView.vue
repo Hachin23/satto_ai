@@ -3,6 +3,8 @@ import { computed, onUnmounted } from 'vue'
 import { usePhotoStore } from '@/stores/photo'
 import { useRouter, useRoute } from 'vue-router'
 import { RefreshCw, Check } from 'lucide-vue-next'
+import { db, type PhotoRecord } from '@/database/db'
+import { createThumbnail } from '@/utils/imageUtils'
 
 import AppHeader from '@/components/AppHeader.vue'
 import ResultPhotoCard from '@/components/ResultPhotoCard.vue'
@@ -35,10 +37,43 @@ const handleBack = () => {
   router.push('/camera') 
 }
 
-const saveCapture = () => {
-  // TODO: 保存処理
+const saveCapture = async () => {
 
-  router.push('/camera')
+  const captureInfo = photoStore.currentCapture
+
+  if (!captureInfo || !captureInfo.blob) {
+    console.error('保存する撮影データがありません')
+    return
+  }
+
+  try {
+    const photoBlob = captureInfo.blob
+    // 2. 一覧画面用のサムネイルを生成 (軽量化のため)
+    const thumbBlob = await createThumbnail(photoBlob, 300);
+    // 3. 保存用データの構築
+    const now = Date.now();
+    const newRecord: PhotoRecord = {
+      photo: photoBlob,
+      thumbnailImage: thumbBlob,
+      resultStatus: captureInfo.status,
+      actionText: captureInfo.actionText,
+      // TODO: 1アクション詳細説明生成機能の結果を格納
+      aiActionDetail: "",
+      isFavorite: false,
+      createdAt: now,
+      updatedAt: now
+    };
+
+    // IndexedDB へ追加
+    const newId = await db.photo_records.add(newRecord);
+      console.log(`保存成功! ID: ${newId}`);
+    
+    // 撮影画面に遷移
+    router.push('/camera')
+
+  } catch (error) {
+    console.error("保存失敗:", error);
+  }
 }
 </script>
 
