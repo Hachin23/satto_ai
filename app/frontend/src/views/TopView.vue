@@ -4,7 +4,7 @@
 </script>
 
 <template>
-  <div class="h-full w-full bg-slate-50 flex flex-col">
+  <div class="h-full w-full flex flex-col">
 
     <AppHeader 
       bgColor="bg-transparent" 
