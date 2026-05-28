@@ -31,7 +31,7 @@ const routes = [
     path: '/result-preview',
     name: 'result-preview',
     component: ResultPreviewView,
-    meta: { hideFooter: true }
+    meta: { title: "撮影結果プレビュー", hideFooter: true }
   },
 ]
 

@@ -39,7 +39,13 @@ const handleCapture = async () => {
     if (capturedBlob) {
       console.log("📸 撮影成功:", capturedBlob)
       // 撮影データをストアに保存
-      photoStore.capturedBlob = capturedBlob
+      // TODO: statusとactionTextはリアルタイム撮影ガイド機能実装時に修正必要
+      photoStore.currentCapture = {
+        blob: capturedBlob,
+        createdAt: Date.now(), 
+        status: 0,
+        actionText: "そのまま撮影してOK!"
+      }
       // 撮影結果プレビュー画面へ遷移
       router.push('/result-preview')
     }
@@ -58,7 +64,7 @@ const handleCapture = async () => {
       borderClass="border-none"
       textColor="text-white"
     >
-      <CircleX @click="router.back()" :size="24"/>
+      <CircleX @click="router.push('/')" :size="24"/>
       <button @click="toggleFlash" :class="{ 'text-yellow-400': isFlashOn }">
         {{ isFlashOn ? '⚡️ ON' : '⚡️ OFF' }}
       </button>
