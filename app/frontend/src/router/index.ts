@@ -25,7 +25,8 @@ const routes = [
   {
     path: '/settings',
     name: 'settings',
-    component: SettingsView
+    component: SettingsView,
+    meta: { title: "設定" }
   },
   {
     path: '/result-preview',
