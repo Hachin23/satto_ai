@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onUnmounted } from 'vue'
 import { usePhotoStore } from '@/stores/photo'
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { RefreshCw, Check } from 'lucide-vue-next'
 import { db, type PhotoRecord } from '@/database/db'
 import { createThumbnail } from '@/utils/imageUtils'
@@ -11,7 +11,6 @@ import ResultPhotoCard from '@/components/ResultPhotoCard.vue'
 
 const photoStore = usePhotoStore()
 const router = useRouter()
-const route = useRoute()
 const captureData = computed(() => photoStore.currentCapture)
 
 // ストアからBlobを取り出して、画面表示用のURLに変換する
@@ -24,11 +23,6 @@ onUnmounted(() => {
   if (previewUrl.value) {
     URL.revokeObjectURL(previewUrl.value)
   }
-})
-
-// タイトルを取得
-const pageTitle = computed(() => {
-  return (route.meta?.title as string) || 'タイトル未定義'
 })
 
 const handleBack = () => {
@@ -79,13 +73,8 @@ const saveCapture = async () => {
 
 <template>
   <div class="w-full h-full bg-[#F2F2F5] flex flex-col items-center px-2">
-    <AppHeader
-      bgColor="bg-[#F2F2F5]" 
-      borderClass="border-none"
-    />
+    <AppHeader bgColor="bg-[#F2F2F5]" borderClass="border-none" />
     
-    <h1 class="text-lg font-bold mb-2">{{ pageTitle }}</h1>
-
     <!-- TODO:リアルタイム撮影ガイドを実装するまでは直書き(action-detail) -->
     <ResultPhotoCard 
       :image-url="previewUrl"

@@ -1,35 +1,11 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
-import { CircleX } from 'lucide-vue-next'
-
 import AppHeader from '@/components/AppHeader.vue'
-
-const router = useRouter()
-const route = useRoute()
-
-// タイトルを取得
-const pageTitle = computed(() => {
-  return (route.meta?.title as string) || 'タイトル未定義'
-})
-
 </script>
 
 <template>
   <div class="flex flex-col items-center h-full w-full">
-    <AppHeader
-      bgColor="bg-[#F2F2F5]" 
-      borderClass="border-none" 
-    >
-      <button
-        class="p-1 text-gray-600 hover:bg-gray-100 rounded-full"
-        @click="router.push('/')"
-      >
-        <CircleX class="w-6 h-6" />
-      </button>
-    </AppHeader>
 
-    <h1 class="text-xl font-bold mb-2">{{ pageTitle }}</h1>
+    <AppHeader bgColor="bg-[#F2F2F5]" borderClass="border-none" />
 
     <div class="w-full flex-1 p-6 flex flex-col">
       <a

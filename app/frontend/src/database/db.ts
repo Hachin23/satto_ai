@@ -5,9 +5,9 @@ export interface PhotoRecord {
   // 自動連番のプライマリーキー
   id?: number
   // 撮影写真データ
-  photo: Blob | null
+  photo: Blob
   // 撮影一覧表示用サムネイル
-  thumbnailImage: Blob | null
+  thumbnailImage: Blob
   // 0: OK, 1: 改善あり
   resultStatus: number
   // AIアドバイスのタイトル

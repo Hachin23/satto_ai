@@ -59,12 +59,7 @@ const handleCapture = async () => {
 
 <template>
   <div class="flex flex-col h-screen w-full bg-black text-white pt-4">
-    <AppHeader
-      bgColor="bg-black" 
-      borderClass="border-none"
-      textColor="text-white"
-    >
-      <CircleX @click="router.push('/')" :size="24"/>
+    <AppHeader bgColor="bg-black" borderClass="border-none" textColor="text-white" >
       <button @click="toggleFlash" :class="{ 'text-yellow-400': isFlashOn }">
         {{ isFlashOn ? '⚡️ ON' : '⚡️ OFF' }}
       </button>

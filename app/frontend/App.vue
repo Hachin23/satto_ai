@@ -7,9 +7,9 @@ const route = useRoute()
 
 <template>
   <div class="h-screen bg-[#F2F2F5] text-slate-900 flex flex-col max-w-md mx-auto shadow-sm overflow-hidden">
-    <main class="flex-1 w-full overflow-y-auto">
+    <div class="flex-1 w-full overflow-y-auto">
       <RouterView />
-    </main>
+    </div>
     <AppFooter v-if="!route.meta.hideFooter"/>
   </div>
 </template>
