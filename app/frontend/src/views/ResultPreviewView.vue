@@ -31,6 +31,8 @@ const handleBack = () => {
   router.push('/camera') 
 }
 
+
+const dummyAiActionDetailText = "バランスが最高ですね！センスあるね～"
 const saveCapture = async () => {
 
   const captureInfo = photoStore.currentCapture
@@ -52,7 +54,7 @@ const saveCapture = async () => {
       resultStatus: captureInfo.status,
       actionText: captureInfo.actionText,
       // TODO: 1アクション詳細説明生成機能の結果を格納
-      aiActionDetail: "",
+      aiActionDetail: dummyAiActionDetailText,
       isFavorite: false,
       createdAt: now,
       updatedAt: now
@@ -77,10 +79,10 @@ const saveCapture = async () => {
     
     <!-- TODO:リアルタイム撮影ガイドを実装するまでは直書き(action-detail) -->
     <ResultPhotoCard 
-      :image-url="previewUrl"
+      :photo-url="previewUrl"
       :status="captureData?.status"
-      :action="captureData?.actionText"
-      action-detail="ナイスショット！光の入り方がとてもきれいです。"
+      :action-text="captureData?.actionText"
+      :ai-action-detail="dummyAiActionDetailText"
     />
 
     <div class="w-full flex justify-center gap-4 py-4">
