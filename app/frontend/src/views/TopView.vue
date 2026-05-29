@@ -6,10 +6,7 @@
 <template>
   <div class="h-full w-full flex flex-col">
 
-    <AppHeader 
-      bgColor="bg-transparent" 
-      borderClass="border-none" 
-      />
+    <AppHeader bgColor="bg-transparent" borderClass="border-none" />
   
     <div class="flex-1 flex flex-col items-center justify-between w-full px-6 py-6">
       <div class="relative flex flex-col items-center w-full mt-6">
@@ -63,7 +60,7 @@
   
         <button 
           class="w-full bg-white hover:bg-gray-50 text-gray-800 py-2 rounded-[2rem] flex items-center justify-center shadow-md border border-gray-100 transition-transform active:scale-95"
-          @click="$router.push('/history')"
+          @click="$router.push('/histories')"
         >
           <HistoryIcon class="w-10 h-10 text-blue-500 mr-4" />
           <div class="text-left">
