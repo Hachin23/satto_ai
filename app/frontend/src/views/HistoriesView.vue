@@ -20,7 +20,7 @@ const handleCardClick = (id: number) => {
 </script>
 
 <template>
-  <div class="min-h-screen w-full flex flex-col bg-[#F2F2F5] px-2">
+  <div class="h-full w-full flex flex-col bg-[#F2F2F5] px-2">
     
     <AppHeader bgColor="bg-[#F2F2F5]" borderClass="border-none" />
 
