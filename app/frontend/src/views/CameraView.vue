@@ -2,7 +2,6 @@
 import { onMounted, onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { usePhotoStore } from '@/stores/photo'
-import { CircleX } from 'lucide-vue-next'
 
 import AppHeader from '@/components/AppHeader.vue'
 import CameraModule from '@/components/CameraModule.vue'
@@ -18,7 +17,7 @@ const cameraRefs = {
 }
 
 const { 
-  isFlashOn, startCamera, stopCamera, toggleFlash, capture 
+  isFlashOn, startCamera, stopCamera, toggleFlash, capture
 } = useCamera(cameraRefs)
 
 onMounted(() => {
@@ -58,7 +57,7 @@ const handleCapture = async () => {
 </script>
 
 <template>
-  <div class="flex flex-col h-screen w-full bg-black text-white pt-4">
+  <div class="flex flex-col h-full bg-black text-white pt-4">
     <AppHeader bgColor="bg-black" borderClass="border-none" textColor="text-white" >
       <button @click="toggleFlash" :class="{ 'text-yellow-400': isFlashOn }">
         {{ isFlashOn ? '⚡️ ON' : '⚡️ OFF' }}

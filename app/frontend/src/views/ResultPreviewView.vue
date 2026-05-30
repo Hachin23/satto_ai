@@ -74,41 +74,43 @@ const saveCapture = async () => {
 </script>
 
 <template>
-  <div class="w-full h-full bg-[#F2F2F5] flex flex-col items-center px-2">
+  <div class="w-full h-full bg-[#F2F2F5] flex flex-col px-2">
     <AppHeader bgColor="bg-[#F2F2F5]" borderClass="border-none" />
     
     <!-- TODO:リアルタイム撮影ガイドを実装するまでは直書き(action-detail) -->
-    <ResultPhotoCard 
-      :photo-url="previewUrl"
-      :status="captureData?.status"
-      :action-text="captureData?.actionText"
-      :ai-action-detail="dummyAiActionDetailText"
-    />
-
-    <div class="w-full flex justify-center gap-4 py-4">
-      <button 
-        class="px-6 py-4 bg-slate-800 text-white flex items-center justify-center rounded-full active:scale-95 transition-transform"
-        @click="handleBack"
-      >
-        <RefreshCw :size="20" />
-        <div class="text-left pl-2">
-          <p class="font-bold leading-none">
-            撮り直し
-          </p>
-        </div>
-      </button>
-      <button
-        class="px-6 py-4 bg-[#197649] text-white font-bold flex items-center justify-center rounded-full active:scale-95 transition-transform"
-        @click="saveCapture"
-      >
-        <Check :size="20" />
-        <div class="text-left pl-2">
-          <p class="font-bold leading-none">
-            この写真でOK!
-          </p>
-        </div>
-      </button>
-    </div>
+    <main class="flex-1 flex flex-col items-center">
+      <ResultPhotoCard 
+        :photo-url="previewUrl"
+        :status="captureData?.status"
+        :action-text="captureData?.actionText"
+        :ai-action-detail="dummyAiActionDetailText"
+      />
+  
+      <div class="w-full flex justify-center gap-4 py-4">
+        <button 
+          class="px-6 py-4 bg-slate-800 text-white flex items-center justify-center rounded-full active:scale-95 transition-transform"
+          @click="handleBack"
+        >
+          <RefreshCw :size="20" />
+          <div class="text-left pl-2">
+            <p class="font-bold leading-none">
+              撮り直し
+            </p>
+          </div>
+        </button>
+        <button
+          class="px-6 py-4 bg-[#197649] text-white font-bold flex items-center justify-center rounded-full active:scale-95 transition-transform"
+          @click="saveCapture"
+        >
+          <Check :size="20" />
+          <div class="text-left pl-2">
+            <p class="font-bold leading-none">
+              この写真でOK!
+            </p>
+          </div>
+        </button>
+      </div>
+    </main>
 
   </div>
 </template>

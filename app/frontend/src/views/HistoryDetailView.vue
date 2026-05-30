@@ -43,7 +43,7 @@ const handleDelete = async () => {
 </script>
 
 <template>
-  <div class="h-full w-full bg-[#F2F2F5] flex flex-col overflow-hidden">
+  <div class="h-full w-full bg-[#F2F2F5] flex flex-col">
     <AppHeader bgColor="bg-transparent" borderClass="border-none" />
 
     <main class="flex-1 p-2 flex flex-col items-center">
