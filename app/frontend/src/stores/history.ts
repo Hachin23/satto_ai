@@ -59,5 +59,20 @@ export const useHistoryStore = defineStore('history', () => {
     }
   }
 
-  return { historyList, fetchHistory, fetchDetailHistory }
+  // トースト通知のState
+  const toastMessage = ref<string | null>(null)
+  const showToast = (message: string) => {
+    toastMessage.value = message
+    setTimeout(() => {
+      toastMessage.value = null
+    }, 2000)
+  }
+
+  return {
+    historyList,
+    fetchHistory,
+    fetchDetailHistory,
+    toastMessage,
+    showToast
+  }
 })
