@@ -17,7 +17,7 @@ defineProps<{
 
 // イベントの定義（ゴミ箱ボタンが押されたとき用）
 const emit = defineEmits<{
-  (e: 'delete'): void
+  (e: 'confirm'): void
 }>()
 </script>
 
@@ -33,7 +33,7 @@ const emit = defineEmits<{
       
       <div class="w-12 flex items-center justify-end gap-1">
         <button v-if="showDelete" 
-          @click="emit('delete')" 
+          @click="emit('confirm')" 
           class="text-slate-400 hover:text-red-500 transition-colors p-1"
         >
           <Trash2 :size="16" />
