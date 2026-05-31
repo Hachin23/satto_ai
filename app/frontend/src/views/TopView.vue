@@ -1,6 +1,11 @@
 <script setup>
-  import AppHeader from '@/components/AppHeader.vue'
-  import { CameraIcon, HistoryIcon } from 'lucide-vue-next'
+import AppHeader from '@/components/AppHeader.vue'
+import { CameraIcon, HistoryIcon } from 'lucide-vue-next'
+import { useFaceLandmarker } from '@/composables/useFaceLandmarker'
+
+// 待ち時間削減のため、アプリを開いた瞬間走らせておく
+const { initFaceAi } = useFaceLandmarker()
+initFaceAi()
 </script>
 
 <template>
