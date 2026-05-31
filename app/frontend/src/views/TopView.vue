@@ -1,6 +1,11 @@
 <script setup>
-  import AppHeader from '@/components/AppHeader.vue'
-  import { CameraIcon, HistoryIcon } from 'lucide-vue-next'
+import AppHeader from '@/components/AppHeader.vue'
+import { CameraIcon, HistoryIcon } from 'lucide-vue-next'
+import { useFaceLandmarker } from '@/composables/useFaceLandmarker'
+
+// 待ち時間削減のため、アプリを開いた瞬間走らせておく
+const { initFaceAi } = useFaceLandmarker()
+initFaceAi()
 </script>
 
 <template>
@@ -9,8 +14,8 @@
     <AppHeader bgColor="bg-transparent" borderClass="border-none" />
   
     <div class="flex-1 flex flex-col items-center justify-between w-full px-6 py-6">
-      <div class="relative flex flex-col items-center w-full mt-6">
-        <div class="absolute -top-1 w-32 h-32 opacity-30 z-0">
+      <div class="relative flex flex-col items-center w-full">
+        <div class="absolute -top-6 w-32 h-32 opacity-30 z-0">
           <img
             src="@/../assets/images/bg-lens-aperture.png"
             alt=""
@@ -18,7 +23,7 @@
           >
         </div>
   
-        <div class="relative z-10 text-center mt-6">
+        <div class="relative z-10 text-center mt-3">
           <h1 class="text-5xl font-bold text-gray-900 tracking-tight">
             Satto Photo
           </h1>

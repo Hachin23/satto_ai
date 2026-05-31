@@ -7,8 +7,8 @@ export function useCamera(refs: {
   const stream = ref<MediaStream | null>(null)
   
   const facingMode = ref<'environment' | 'user'>('environment') // カメラの向き
-  const isFlashOn = ref(false) // フラッシュ状態
-  const zoomLevel = ref(1)
+  const isFlashOn = ref<boolean>(false) // フラッシュ状態
+  const zoomLevel = ref<number>(1)
 
   const startCamera = async () => {
     // 既存のストリームがあれば停止してから再開
@@ -95,6 +95,6 @@ export function useCamera(refs: {
   }
 
   return { 
-    facingMode, isFlashOn, zoomLevel, startCamera, stopCamera, toggleFlash, setZoom, capture 
+    facingMode, isFlashOn, zoomLevel, startCamera, stopCamera, toggleFlash, setZoom, capture
   }
 }

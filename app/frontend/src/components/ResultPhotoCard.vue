@@ -41,8 +41,12 @@ const emit = defineEmits<{
       </div>
     </div>
 
-    <div class="w-full overflow-hidden rounded-xl bg-slate-100 aspect-[4/3] flex items-center justify-center">
-      <img :src="photoUrl" alt="撮影画像" class="w-full h-full object-cover" />
+    <div class="w-full overflow-hidden rounded-xl bg-slate-100 aspect-[8/7] flex items-center justify-center">
+      <img 
+        :src="photoUrl" 
+        alt="撮影画像" 
+        class="w-full h-full object-cover" 
+      />
     </div>
 
     <div v-if="status == 0" class="w-fit flex items-center gap-1.5 text-xs font-bold text-white bg-[#1B7243] px-3 py-1 rounded-full text-left">

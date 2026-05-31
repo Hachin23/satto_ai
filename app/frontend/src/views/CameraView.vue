@@ -2,15 +2,16 @@
 import { onMounted, onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { usePhotoStore } from '@/stores/photo'
-import { CircleX } from 'lucide-vue-next'
+import { useCamera } from '@/composables/useCamera'
+import { useFaceLandmarker } from '@/composables/useFaceLandmarker'
 
 import AppHeader from '@/components/AppHeader.vue'
 import CameraModule from '@/components/CameraModule.vue'
 
-import { useCamera } from '@/composables/useCamera'
-
 const router = useRouter()
 const photoStore = usePhotoStore()
+const { isAiLoading, initFaceAi, analyzeFrame } = useFaceLandmarker()
+let animationFrameId: number | null = null
 
 const cameraRefs = {
   video: ref<HTMLVideoElement | null>(null),
@@ -18,16 +19,31 @@ const cameraRefs = {
 }
 
 const { 
-  isFlashOn, startCamera, stopCamera, toggleFlash, capture 
+  isFlashOn, startCamera, stopCamera, toggleFlash, capture
 } = useCamera(cameraRefs)
 
-onMounted(() => {
-  startCamera()
+onMounted(async () => {
+  // 直接撮影画面を開くのを考慮して、ここでも呼んでおく
+  await initFaceAi()
+  // カメラ起動
+  await startCamera()
+  startAnalyzeLoop()
 })
 
 onUnmounted(() => {
   stopCamera()
+  if (animationFrameId) cancelAnimationFrame(animationFrameId)
 })
+
+const startAnalyzeLoop = () => {
+  if (cameraRefs.video.value) {
+    const result = analyzeFrame(cameraRefs.video.value)
+    if (result && result.faceLandmarks && result.faceLandmarks.length > 0) {
+      console.log('座標取得中！ 鼻の頭のx座標:', result.faceLandmarks[0][0].x)
+    }
+  }
+  animationFrameId = requestAnimationFrame(startAnalyzeLoop)
+}
 
 const isProcessing = ref(false) // 処理中フラグを定義
 
@@ -58,7 +74,7 @@ const handleCapture = async () => {
 </script>
 
 <template>
-  <div class="flex flex-col h-screen w-full bg-black text-white pt-4">
+  <div class="flex flex-col h-full bg-black text-white pt-4">
     <AppHeader bgColor="bg-black" borderClass="border-none" textColor="text-white" >
       <button @click="toggleFlash" :class="{ 'text-yellow-400': isFlashOn }">
         {{ isFlashOn ? '⚡️ ON' : '⚡️ OFF' }}
