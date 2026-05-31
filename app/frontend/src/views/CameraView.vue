@@ -22,16 +22,11 @@ const {
   isFlashOn, startCamera, stopCamera, toggleFlash, capture
 } = useCamera(cameraRefs)
 
-// トップ画面で初期化しているが、直接撮影画面を開くのを考慮して、ここでも呼んでおく
-initFaceAi()
 onMounted(async () => {
+  // 直接撮影画面を開くのを考慮して、ここでも呼んでおく
+  await initFaceAi()
   // カメラ起動
   await startCamera()
-
-  // 初期化済みかどうかの確認
-  while (isAiLoading.value) {
-    await new Promise(resolve => setTimeout(resolve, 50)) // 50msずつチェック
-  }
   startAnalyzeLoop()
 })
 

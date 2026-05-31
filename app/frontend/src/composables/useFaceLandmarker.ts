@@ -2,18 +2,19 @@
 import { ref } from 'vue'
 import { FilesetResolver, FaceLandmarker } from '@mediapipe/tasks-vision'
 
-const isAiLoading = ref(true)
+const isAiLoading = ref(false)
 let sharedFaceLandmarker: FaceLandmarker | null = null
 
 export const useFaceLandmarker = () => {
 
   const initFaceAi = async () => {  
     
-    if (sharedFaceLandmarker) {
-      console.log('既存の FaceLandmarker を再利用します')
+    if (sharedFaceLandmarker || isAiLoading.value) {
+      console.log('初期化済みまたは初期化中です')
       return
     }
-  
+    
+    isAiLoading.value = true
     try {
       //Wasm(WebAssembly)の読み込み
       const vision = await FilesetResolver.forVisionTasks(
@@ -30,10 +31,11 @@ export const useFaceLandmarker = () => {
         numFaces: 1 // 検出できる顔の最大数
       });
       
-      isAiLoading.value = false
       console.log('FaceLandmarker 初期化成功')
     } catch (error) {
       console.error('AIの初期化に失敗しました:', error)
+    } finally {
+      isAiLoading.value = false
     }
   }
 
