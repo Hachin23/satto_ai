@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import { usePhotoStore } from '@/stores/photo'
 import { useCamera } from '@/composables/useCamera'
 import { useFaceLandmarker } from '@/composables/useFaceLandmarker'
+import { useFaceAnalysis } from '@/composables/useFaceAnalysis'
 
 import AppHeader from '@/components/AppHeader.vue'
 import CameraModule from '@/components/CameraModule.vue'
@@ -11,6 +12,7 @@ import CameraModule from '@/components/CameraModule.vue'
 const router = useRouter()
 const photoStore = usePhotoStore()
 const { isAiLoading, initFaceAi, analyzeFrame } = useFaceLandmarker()
+const { analyzeFaceData } = useFaceAnalysis()
 let animationFrameId: number | null = null
 
 const cameraRefs = {
@@ -38,8 +40,12 @@ onUnmounted(() => {
 const startAnalyzeLoop = () => {
   if (cameraRefs.video.value) {
     const result = analyzeFrame(cameraRefs.video.value)
+
     if (result && result.faceLandmarks && result.faceLandmarks.length > 0) {
-      console.log('座標取得中！ 鼻の頭のx座標:', result.faceLandmarks[0][0].x)
+      const landmarks = result.faceLandmarks[0]
+      const analysis = analyzeFaceData(landmarks)
+
+      console.log('分析結果:', analysis)
     }
   }
   animationFrameId = requestAnimationFrame(startAnalyzeLoop)
