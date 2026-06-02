@@ -5,6 +5,7 @@ import { usePhotoStore } from '@/stores/photo'
 import { useCamera } from '@/composables/useCamera'
 import { useFaceLandmarker } from '@/composables/useFaceLandmarker'
 import { useFaceAnalysis } from '@/composables/useFaceAnalysis'
+import { useFaceJudge } from '@/composables/useFaceJudge'
 
 import AppHeader from '@/components/AppHeader.vue'
 import CameraModule from '@/components/CameraModule.vue'
@@ -13,6 +14,7 @@ const router = useRouter()
 const photoStore = usePhotoStore()
 const { isAiLoading, initFaceAi, analyzeFrame } = useFaceLandmarker()
 const { analyzeFaceData } = useFaceAnalysis()
+const { judgeFaceStatus } = useFaceJudge()
 let animationFrameId: number | null = null
 
 const cameraRefs = {
@@ -44,8 +46,10 @@ const startAnalyzeLoop = () => {
     if (result && result.faceLandmarks && result.faceLandmarks.length > 0) {
       const landmarks = result.faceLandmarks[0]
       const analysis = analyzeFaceData(landmarks)
-
-      console.log('分析結果:', analysis)
+      if (analysis) {
+        const judgeResult = judgeFaceStatus(analysis)
+        console.log('判定結果:', judgeResult)
+      }
     }
   }
   animationFrameId = requestAnimationFrame(startAnalyzeLoop)
