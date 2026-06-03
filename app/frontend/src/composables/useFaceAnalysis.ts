@@ -1,12 +1,10 @@
 import type { NormalizedLandmark } from '@mediapipe/tasks-vision'
+import type { FaceAnalysisResult } from '@/types/faceAnalysisTypes'
 
-export interface FaceAnalysisResult {
-  boundingBox: { minX: number; minY: number; maxX: number; maxY: number }
-  centerOffset: { x: number; y: number }
-  angle: number
-  areaRatio: number
-  margins: { top: number; bottom: number; left: number; right: number }
-}
+// 顔ランドマークのインデックス
+const LEFT_IRIS_CENTER_INDEX = 468 
+const RIGHT_IRIS_CENTER_INDEX = 473
+const TOP_HEAD_INDEX = 10
 
 export const useFaceAnalysis = () => {
 
@@ -28,17 +26,20 @@ export const useFaceAnalysis = () => {
   }
 
   // 2.顔の位置を算出
-  const calculateCenterOffset = (boundingBox: FaceAnalysisResult['boundingBox']) => {
+  const calculateFaceCenter = (boundingBox: FaceAnalysisResult['boundingBox']) => {
     const bboxCenterX = (boundingBox.minX + boundingBox.maxX) / 2
     const bboxCenterY = (boundingBox.minY + boundingBox.maxY) / 2
-    return { x:bboxCenterX, y: bboxCenterY }
+    return {
+      x: bboxCenterX,
+      y: bboxCenterY
+    }
   }
 
   // 3.傾きを算出
   const calculateAngle = (faceLandmarks: NormalizedLandmark[]) => {
     // 左右の黒目の中心の座標を取得
-    const leftEye = faceLandmarks[468]  // 画面の右側（本人の左目）
-    const rightEye = faceLandmarks[473] // 画面の左側（本人の右目）
+    const leftEye = faceLandmarks[LEFT_IRIS_CENTER_INDEX]
+    const rightEye = faceLandmarks[RIGHT_IRIS_CENTER_INDEX]
 
     // 2点間の y の差と x の差を計算
     const dy = leftEye.y - rightEye.y
@@ -57,38 +58,29 @@ export const useFaceAnalysis = () => {
     return areaRatio
   }
   
-  // 5. 上下左右の余白を算出
-  const calculateMargins = (boundingBox: FaceAnalysisResult['boundingBox'], faceLandmarks: NormalizedLandmark[]) => {
+  // 5. 上の余白を算出
+  const calculateHeadroomRatio = (faceLandmarks: NormalizedLandmark[]) => {
     // 頭のてっぺん（10番）のY座標を使用
-    const topHeadY = faceLandmarks[10].y
-
-    // 画面上端（0.0）から頭頂までの距離
-    const top = topHeadY
-     // 画面下端（1.0）からアゴの下までの距離
-    const bottom = 1.0 - boundingBox.maxY
-    // 画面左端（0.0）から顔の左端までの距離
-    const left = boundingBox.minX
-     // 画面右端（1.0）から顔の右端までの距離
-    const right = 1.0 - boundingBox.maxX
-
-    return { top, bottom, left, right }
+    const topHeadY = faceLandmarks[TOP_HEAD_INDEX].y
+    const headroomRatio = topHeadY
+    return headroomRatio
   }
 
   const analyzeFaceData = (faceLandmarks: NormalizedLandmark[]): FaceAnalysisResult | null => {
     if (!faceLandmarks || faceLandmarks.length === 0) return null
 
     const boundingBox = calculateBoundingBox(faceLandmarks)
-    const centerOffset = calculateCenterOffset(boundingBox)
+    const faceCenter = calculateFaceCenter(boundingBox)
     const angle = calculateAngle(faceLandmarks)
     const areaRatio = calculateAreaRatio(boundingBox)
-    const margins = calculateMargins(boundingBox, faceLandmarks)
+    const headroomRatio = calculateHeadroomRatio(faceLandmarks)
 
     return {
       boundingBox,
-      centerOffset,
+      faceCenter,
       angle,
       areaRatio,
-      margins
+      headroomRatio
     }
   }
   return {
