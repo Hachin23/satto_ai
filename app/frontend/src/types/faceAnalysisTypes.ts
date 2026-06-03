@@ -4,11 +4,19 @@ export type DistanceStatus =
   | 'too_close' 
   | 'good'
 
+export type DistanceActionKey = {
+  [key in DistanceStatus]: string;
+};
+
 // 顔の位置の判定ステータス
 export type PositionStatus =
   | 'too_left'
   | 'too_right'
   | 'center'
+
+export type PositionActionKey = {
+  [key in PositionStatus]: string;
+};
 
 // 傾きの判定ステータス
 export type TiltStatus =
@@ -16,12 +24,19 @@ export type TiltStatus =
   | 'tilted_right' 
   | 'level'
 
+export type TiltActionKey = {
+  [key in TiltStatus]: string;
+};
+
 // 頭上の余白（ヘッドルーム）の判定ステータス
 export type HeadRoomStatus =
   | 'too_tight'
   | 'too_loose'
   | 'good'
 
+export type HeadRoomActionKey = {
+  [key in HeadRoomStatus]: string;
+};
 
 // 判定データ取得の型
 export interface FaceAnalysisResult {
