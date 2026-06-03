@@ -24,7 +24,7 @@ export const useFaceLandmarker = () => {
       sharedFaceLandmarker = await FaceLandmarker.createFromOptions(vision, {
         baseOptions: {
           modelAssetPath: '/face_landmarker.task', //public直下に配置
-          delegate: 'GPU'
+          delegate: 'CPU'
         },
         runningMode: "VIDEO", // カメラ映像のリアルタイム解析用
         outputFaceBlendshapes: true, // 笑顔などの判定用

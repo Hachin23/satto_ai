@@ -6,15 +6,17 @@ import { useCamera } from '@/composables/useCamera'
 import { useFaceLandmarker } from '@/composables/useFaceLandmarker'
 import { useFaceAnalysis } from '@/composables/useFaceAnalysis'
 import { useFaceJudge } from '@/composables/useFaceJudge'
+import { useActionMapping } from '@/composables/useActionMapping'
 
 import AppHeader from '@/components/AppHeader.vue'
 import CameraModule from '@/components/CameraModule.vue'
 
 const router = useRouter()
 const photoStore = usePhotoStore()
-const { isAiLoading, initFaceAi, analyzeFrame } = useFaceLandmarker()
+const { initFaceAi, analyzeFrame } = useFaceLandmarker()
 const { analyzeFaceData } = useFaceAnalysis()
 const { judgeFaceStatus } = useFaceJudge()
+const { decideOneAction } = useActionMapping()
 let animationFrameId: number | null = null
 
 const cameraRefs = {
@@ -40,17 +42,23 @@ onUnmounted(() => {
 })
 
 const startAnalyzeLoop = () => {
-  if (cameraRefs.video.value) {
-    const result = analyzeFrame(cameraRefs.video.value)
-
-    if (result && result.faceLandmarks && result.faceLandmarks.length > 0) {
-      const landmarks = result.faceLandmarks[0]
-      const analysis = analyzeFaceData(landmarks)
-      if (analysis) {
-        const judgeResult = judgeFaceStatus(analysis)
-        console.log('判定結果:', judgeResult)
+  try {
+    if (cameraRefs.video.value) {
+      const result = analyzeFrame(cameraRefs.video.value)
+  
+      if (result && result.faceLandmarks && result.faceLandmarks.length > 0) {
+        const landmarks = result.faceLandmarks[0]
+        const analysis = analyzeFaceData(landmarks)
+        
+        if (analysis) {
+          const judgeResult = judgeFaceStatus(analysis)
+          const actionText = decideOneAction(judgeResult)
+          console.log('1アクション:', actionText)
+        }
       }
     }
+  } catch (error) {
+    console.error('detectForVideo エラー', error)
   }
   animationFrameId = requestAnimationFrame(startAnalyzeLoop)
 }
