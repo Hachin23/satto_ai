@@ -67,3 +67,13 @@ export interface FaceJudgeResult {
     headroomRatio: number
   }
 }
+
+// 顔の検出ステータス
+export type FaceDetectStatus = 'NOT_DETECTED' | 'VERIFYING' | 'DETECTED'
+
+// 顔検出状態の管理用オブジェクトの型
+export interface FaceStatusState {
+  status: FaceDetectStatus
+  message: string
+  isValid: boolean // すべての閾値をクリアして撮影可能かどうか
+}

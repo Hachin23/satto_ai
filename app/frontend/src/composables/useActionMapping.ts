@@ -27,16 +27,19 @@ export const useActionMapping = () => {
   }
 
   const decideOneAction = (faceJudgeResult: FaceJudgeResult) => {
-    const mappingResult = mappingJudgeResult(faceJudgeResult)
+    if (faceJudgeResult.isAllOk) return OK_ACTION_TEXT
 
+    const mappingResult = mappingJudgeResult(faceJudgeResult)
+    let actionText = ""
     for (let i = 0; i < ACTION_MAPPING_PRIORITY.length; i++) {
       const priority = ACTION_MAPPING_PRIORITY[i] as PriorityKey
       const target = mappingResult[priority]
       if (target && target.action !== "") {
-        return target.action
+        actionText = target.action
+        break
       }
     }
-    return OK_ACTION_TEXT
+    return actionText
   }
 
   return {
