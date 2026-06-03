@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, onBeforeUnmount, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { usePhotoStore } from '@/stores/photo'
 import { useCamera } from '@/composables/useCamera'
 import { useFaceLandmarker } from '@/composables/useFaceLandmarker'
 import { useFaceAnalysis } from '@/composables/useFaceAnalysis'
 import { useFaceJudge } from '@/composables/useFaceJudge'
-import { useActionMapping } from '@/composables/useActionMapping'
+import { useFaceDetection } from '@/composables/useFaceDetection'
 
 import AppHeader from '@/components/AppHeader.vue'
 import CameraModule from '@/components/CameraModule.vue'
@@ -16,7 +16,7 @@ const photoStore = usePhotoStore()
 const { initFaceAi, analyzeFrame } = useFaceLandmarker()
 const { analyzeFaceData } = useFaceAnalysis()
 const { judgeFaceStatus } = useFaceJudge()
-const { decideOneAction } = useActionMapping()
+const { faceStatus, handleFaceDetection } = useFaceDetection()
 let animationFrameId: number | null = null
 
 const cameraRefs = {
@@ -36,26 +36,23 @@ onMounted(async () => {
   startAnalyzeLoop()
 })
 
-onUnmounted(() => {
+onBeforeUnmount(() => {
+  // カメラのストリームを停止（DOMが消える前に安全に処理）
   stopCamera()
-  if (animationFrameId) cancelAnimationFrame(animationFrameId)
+  // 解析ループを完全に停止させてゾンビプロセスを防ぐ
+  if (animationFrameId) {
+    cancelAnimationFrame(animationFrameId)
+    animationFrameId = null
+  }
+  console.log('CameraView: クリーンアップ完了')
 })
 
 const startAnalyzeLoop = () => {
   try {
     if (cameraRefs.video.value) {
       const result = analyzeFrame(cameraRefs.video.value)
-  
-      if (result && result.faceLandmarks && result.faceLandmarks.length > 0) {
-        const landmarks = result.faceLandmarks[0]
-        const analysis = analyzeFaceData(landmarks)
-        
-        if (analysis) {
-          const judgeResult = judgeFaceStatus(analysis)
-          const actionText = decideOneAction(judgeResult)
-          console.log('1アクション:', actionText)
-        }
-      }
+      handleFaceDetection(result, analyzeFaceData, judgeFaceStatus)
+      console.log(faceStatus.value.message)
     }
   } catch (error) {
     console.error('detectForVideo エラー', error)

@@ -1,6 +1,6 @@
 
 import { ref } from 'vue'
-import { FilesetResolver, FaceLandmarker } from '@mediapipe/tasks-vision'
+import { FilesetResolver, FaceLandmarker, FaceLandmarkerResult } from '@mediapipe/tasks-vision'
 
 const isAiLoading = ref(false)
 let sharedFaceLandmarker: FaceLandmarker | null = null
@@ -39,7 +39,7 @@ export const useFaceLandmarker = () => {
     }
   }
 
-  const analyzeFrame = (videoElement: HTMLVideoElement) => {
+  const analyzeFrame = (videoElement: HTMLVideoElement): FaceLandmarkerResult | null => {
     if (!sharedFaceLandmarker || videoElement.readyState < videoElement.HAVE_CURRENT_DATA) return null
     return sharedFaceLandmarker.detectForVideo(videoElement, performance.now())
   }
