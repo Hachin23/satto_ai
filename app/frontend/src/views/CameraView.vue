@@ -7,6 +7,7 @@ import { useFaceLandmarker } from '@/composables/useFaceLandmarker'
 import { useFaceAnalysis } from '@/composables/useFaceAnalysis'
 import { useFaceJudge } from '@/composables/useFaceJudge'
 import { useFaceDetection } from '@/composables/useFaceDetection'
+import { FaceJudgeResult } from '@/types/faceAnalysisTypes'
 
 import AppHeader from '@/components/AppHeader.vue'
 import CameraModule from '@/components/CameraModule.vue'
@@ -18,6 +19,7 @@ const { analyzeFaceData } = useFaceAnalysis()
 const { judgeFaceStatus } = useFaceJudge()
 const { faceStatus, handleFaceDetection } = useFaceDetection()
 let animationFrameId: number | null = null
+let currentSnapshotJudgeResult: FaceJudgeResult | null = null
 
 const cameraRefs = {
   video: ref<HTMLVideoElement | null>(null),
@@ -51,8 +53,8 @@ const startAnalyzeLoop = () => {
   try {
     if (cameraRefs.video.value) {
       const result = analyzeFrame(cameraRefs.video.value)
-      handleFaceDetection(result, analyzeFaceData, judgeFaceStatus)
-      console.log(faceStatus.value.message)
+      currentSnapshotJudgeResult = handleFaceDetection(result, analyzeFaceData, judgeFaceStatus)
+      console.log(currentSnapshotJudgeResult)
     }
   } catch (error) {
     console.error('detectForVideo エラー', error)
@@ -100,6 +102,7 @@ const handleCapture = async () => {
       <CameraModule
         :video-ref="cameraRefs.video" 
         :is-processing="isProcessing"
+        :face-status="faceStatus"
         @shutter="handleCapture" />
     </main>
 

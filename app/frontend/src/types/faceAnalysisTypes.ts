@@ -5,7 +5,7 @@ export type DistanceStatus =
   | 'good'
 
 export type DistanceActionKey = {
-  [key in DistanceStatus]: string;
+  [key in DistanceStatus]: { text: string; icon: string};
 };
 
 // 顔の位置の判定ステータス
@@ -15,7 +15,7 @@ export type PositionStatus =
   | 'center'
 
 export type PositionActionKey = {
-  [key in PositionStatus]: string;
+  [key in PositionStatus]: { text: string; icon: string};
 };
 
 // 傾きの判定ステータス
@@ -25,7 +25,7 @@ export type TiltStatus =
   | 'level'
 
 export type TiltActionKey = {
-  [key in TiltStatus]: string;
+  [key in TiltStatus]: { text: string; icon: string};
 };
 
 // 頭上の余白（ヘッドルーム）の判定ステータス
@@ -35,7 +35,7 @@ export type HeadRoomStatus =
   | 'good'
 
 export type HeadRoomActionKey = {
-  [key in HeadRoomStatus]: string;
+  [key in HeadRoomStatus]: { text: string; icon: string};
 };
 
 // 判定データ取得の型
@@ -75,5 +75,6 @@ export type FaceDetectStatus = 'NOT_DETECTED' | 'VERIFYING' | 'DETECTED'
 export interface FaceStatusState {
   status: FaceDetectStatus
   message: string
+  icon: string
   isValid: boolean // すべての閾値をクリアして撮影可能かどうか
 }

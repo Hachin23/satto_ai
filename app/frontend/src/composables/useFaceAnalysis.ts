@@ -42,8 +42,8 @@ export const useFaceAnalysis = () => {
     const rightEye = faceLandmarks[RIGHT_IRIS_CENTER_INDEX]
 
     // 2点間の y の差と x の差を計算
-    const dy = leftEye.y - rightEye.y
-    const dx = leftEye.x - rightEye.x
+    const dy = rightEye.y - leftEye.y
+    const dx = rightEye.x - leftEye.x
 
     // Math.atan2 を使って角度（ラジアン）を求め、度数法（°）に変換
     const radians = Math.atan2(dy, dx)
