@@ -69,7 +69,13 @@ export interface FaceJudgeResult {
 }
 
 // 顔の検出ステータス
-export type FaceDetectStatus = 'NOT_DETECTED' | 'VERIFYING' | 'DETECTED'
+export const FACE_DETECT_STATUS_LIST = ['NOT_DETECTED', 'VERIFYING', 'DETECTED'] as const
+export type FaceDetectStatus = typeof FACE_DETECT_STATUS_LIST[number]
+export const FACE_STATUS_INDEX = {
+  NOT_DETECTED: FACE_DETECT_STATUS_LIST.indexOf('NOT_DETECTED'), // 0
+  VERIFYING:    FACE_DETECT_STATUS_LIST.indexOf('VERIFYING'),     // 1
+  DETECTED:     FACE_DETECT_STATUS_LIST.indexOf('DETECTED')       // 2
+} as const
 
 // 顔検出状態の管理用オブジェクトの型
 export interface FaceStatusState {

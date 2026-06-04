@@ -61,6 +61,7 @@ export const useFaceDetection = () => {
 
   return {
     faceStatus,
-    handleFaceDetection
+    handleFaceDetection,
+    throttledUpdateUI
   }
 }
