@@ -7,6 +7,7 @@ import { useFaceLandmarker } from '@/composables/useFaceLandmarker'
 import { useFaceAnalysis } from '@/composables/useFaceAnalysis'
 import { useFaceJudge } from '@/composables/useFaceJudge'
 import { useFaceDetection } from '@/composables/useFaceDetection'
+import { FaceJudgeResult, FACE_DETECT_STATUS_LIST } from '@/types/faceAnalysisTypes'
 
 import AppHeader from '@/components/AppHeader.vue'
 import CameraModule from '@/components/CameraModule.vue'
@@ -16,8 +17,9 @@ const photoStore = usePhotoStore()
 const { initFaceAi, analyzeFrame } = useFaceLandmarker()
 const { analyzeFaceData } = useFaceAnalysis()
 const { judgeFaceStatus } = useFaceJudge()
-const { faceStatus, handleFaceDetection } = useFaceDetection()
+const { faceStatus, handleFaceDetection, throttledUpdateUI } = useFaceDetection()
 let animationFrameId: number | null = null
+let currentSnapshotJudgeResult: FaceJudgeResult | null = null
 
 const cameraRefs = {
   video: ref<HTMLVideoElement | null>(null),
@@ -51,8 +53,8 @@ const startAnalyzeLoop = () => {
   try {
     if (cameraRefs.video.value) {
       const result = analyzeFrame(cameraRefs.video.value)
-      handleFaceDetection(result, analyzeFaceData, judgeFaceStatus)
-      console.log(faceStatus.value.message)
+      currentSnapshotJudgeResult = handleFaceDetection(result, analyzeFaceData, judgeFaceStatus)
+      // console.log(currentSnapshotJudgeResult)
     }
   } catch (error) {
     console.error('detectForVideo エラー', error)
@@ -65,23 +67,32 @@ const isProcessing = ref(false) // 処理中フラグを定義
 const handleCapture = async () => {
   try {
     isProcessing.value = true // 処理開始
+
+    if (animationFrameId) {
+      cancelAnimationFrame(animationFrameId)
+      animationFrameId = null
+      console.log("📸 撮影のため、リアルタイム解析ループを停止しました")
+    }
+    throttledUpdateUI.cancel()
+
     const capturedBlob = await capture()
     
     if (capturedBlob) {
       console.log("📸 撮影成功:", capturedBlob)
+      const currentStatus = FACE_DETECT_STATUS_LIST.indexOf(faceStatus.value.status)
       // 撮影データをストアに保存
-      // TODO: statusとactionTextはリアルタイム撮影ガイド機能実装時に修正必要
       photoStore.currentCapture = {
         blob: capturedBlob,
         createdAt: Date.now(), 
-        status: 0,
-        actionText: "そのまま撮影してOK!"
+        status: currentStatus,
+        actionText: faceStatus.value.message
       }
       // 撮影結果プレビュー画面へ遷移
       router.push('/result-preview')
     }
   } catch(error) {
     console.error("撮影失敗:", error)
+    startAnalyzeLoop()
   } finally {
     isProcessing.value = false // 処理終了
   }
@@ -100,6 +111,7 @@ const handleCapture = async () => {
       <CameraModule
         :video-ref="cameraRefs.video" 
         :is-processing="isProcessing"
+        :face-status="faceStatus"
         @shutter="handleCapture" />
     </main>
 

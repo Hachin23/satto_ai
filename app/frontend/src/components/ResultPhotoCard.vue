@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Sparkles, CircleCheck, Trash2 } from 'lucide-vue-next'
+import { FACE_STATUS_INDEX } from '@/types/faceAnalysisTypes'
 
 defineProps<{
   photoUrl: string
@@ -49,27 +50,40 @@ const emit = defineEmits<{
       />
     </div>
 
-    <div v-if="status == 0" class="w-fit flex items-center gap-1.5 text-xs font-bold text-white bg-[#1B7243] px-3 py-1 rounded-full text-left">
+    <div v-if="status === FACE_STATUS_INDEX.NOT_DETECTED"
+      class="w-fit flex items-center gap-1.5 text-xs font-bold text-white bg-[#11c2f870] px-3 py-1 rounded-full text-left">
+      <span>風景・その他</span>
+    </div>
+    <div v-else-if="status == FACE_STATUS_INDEX.VERIFYING"
+      class="w-fit flex items-center gap-1.5 text-sm font-bold text-white bg-yellow-400 p-1 rounded-lg text-left">
+      <Sparkles :size="14" />
+      <span>改善あり</span>
+    </div>
+    <div v-else-if="status == FACE_STATUS_INDEX.DETECTED" 
+      class="w-fit flex items-center gap-1.5 text-xs font-bold text-white bg-[#2fd47c] px-3 py-1 rounded-full text-left">
       <CircleCheck :size="14" />
       <span>OK</span>
     </div>
-    <div v-else class="w-fit flex items-center gap-1.5 text-sm font-bold text-white bg-yellow-400 p-1 rounded-lg text-left">
-      <Sparkles :size="14" />
-      <span>改善あり</span>
-    </div>    
   </div>
 
-  <div class="w-full bg-white rounded-xl p-2 border border-slate-100">
-    <div v-if="status == 0" class="flex items-center gap-1 text-xs font-bold text-pink-500 mb-1">
-      <span>✨</span>
-      <span>AIグッジョブ！</span>
-    </div>
-    <div v-else class="flex items-center gap-2 text-xs font-bold text-pink-500 mb-1">
+  <div v-if="status == FACE_STATUS_INDEX.VERIFYING || status == FACE_STATUS_INDEX.DETECTED" 
+    class="w-full bg-white rounded-xl p-2 border border-slate-100">
+    <div v-if="status == FACE_STATUS_INDEX.VERIFYING" 
+      class="flex items-center gap-1 text-xs font-bold text-pink-500 mb-1">
       <span>💬</span>
       <span>AIアドバイス</span>
     </div>
+    <div v-else class="flex items-center gap-2 text-xs font-bold text-pink-500 mb-1">
+      <span>✨</span>
+      <span>AIグッジョブ！</span>
+    </div>
     <h4 class="text-sm font-bold text-slate-800 mb-1">{{ actionText }}</h4>
     <p class="text-xs text-slate-500 leading-relaxed">{{ aiActionDetail }}</p>
+  </div>
+  <div v-else class="text-center py-4 px-4 bg-neutral-600/30 rounded-xl">
+    <p class="text-sm text-neutral-500 font-medium">
+        ⚠️ 人が写っていないため、アドバイスは非表示になります。
+    </p>
   </div>
 
 </template>

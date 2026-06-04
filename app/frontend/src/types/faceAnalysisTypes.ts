@@ -5,7 +5,7 @@ export type DistanceStatus =
   | 'good'
 
 export type DistanceActionKey = {
-  [key in DistanceStatus]: string;
+  [key in DistanceStatus]: { text: string; icon: string};
 };
 
 // 顔の位置の判定ステータス
@@ -15,7 +15,7 @@ export type PositionStatus =
   | 'center'
 
 export type PositionActionKey = {
-  [key in PositionStatus]: string;
+  [key in PositionStatus]: { text: string; icon: string};
 };
 
 // 傾きの判定ステータス
@@ -25,7 +25,7 @@ export type TiltStatus =
   | 'level'
 
 export type TiltActionKey = {
-  [key in TiltStatus]: string;
+  [key in TiltStatus]: { text: string; icon: string};
 };
 
 // 頭上の余白（ヘッドルーム）の判定ステータス
@@ -35,7 +35,7 @@ export type HeadRoomStatus =
   | 'good'
 
 export type HeadRoomActionKey = {
-  [key in HeadRoomStatus]: string;
+  [key in HeadRoomStatus]: { text: string; icon: string};
 };
 
 // 判定データ取得の型
@@ -69,11 +69,18 @@ export interface FaceJudgeResult {
 }
 
 // 顔の検出ステータス
-export type FaceDetectStatus = 'NOT_DETECTED' | 'VERIFYING' | 'DETECTED'
+export const FACE_DETECT_STATUS_LIST = ['NOT_DETECTED', 'VERIFYING', 'DETECTED'] as const
+export type FaceDetectStatus = typeof FACE_DETECT_STATUS_LIST[number]
+export const FACE_STATUS_INDEX = {
+  NOT_DETECTED: FACE_DETECT_STATUS_LIST.indexOf('NOT_DETECTED'), // 0
+  VERIFYING:    FACE_DETECT_STATUS_LIST.indexOf('VERIFYING'),     // 1
+  DETECTED:     FACE_DETECT_STATUS_LIST.indexOf('DETECTED')       // 2
+} as const
 
 // 顔検出状態の管理用オブジェクトの型
 export interface FaceStatusState {
   status: FaceDetectStatus
   message: string
+  icon: string
   isValid: boolean // すべての閾値をクリアして撮影可能かどうか
 }
