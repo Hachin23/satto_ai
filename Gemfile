@@ -53,5 +53,5 @@ group :test do
 end
 
 gem "vite_rails"
-gem 'openai'
+gem "openai"
 gem "dotenv-rails"

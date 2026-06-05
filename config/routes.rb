@@ -12,7 +12,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :detail_actions, only: [:create]
+      resources :detail_actions, only: [ :create ]
     end
   end
 

@@ -9,7 +9,7 @@ class OpenaiService
   def fetch_detail_action
     # イニシャライザで設定しているのでClient.newでOK
     openai = OpenAI::Client.new
-    system_prompt = I18n.t('ai_templates.system_prompt')
+    system_prompt = I18n.t("ai_templates.system_prompt")
     Rails.logger.info(system_prompt)
 
     chat_completion = openai.chat.completions.create(
