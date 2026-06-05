@@ -10,6 +10,12 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "top#index"
 
+  namespace :api do
+    namespace :v1 do
+      resources :detail_actions, only: [:create]
+    end
+  end
+
   # Vue Router(history mode) 用のフォールバックルーティング
   # リロード時のRouting Errorを防ぐため、存在しないパスはtop#indexへフォールバックする
   # HTMLリクエストのみ対象とし、Ajax/API通信は除外

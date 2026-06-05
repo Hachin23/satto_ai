@@ -14,6 +14,8 @@ defineProps<{
   actionText?: string
   // 「もう少し距離をとると…」など
   aiActionDetail?: string
+  // ローディングリアクティブ
+  isLoading?: boolean
 }>()
 
 // イベントの定義（ゴミ箱ボタンが押されたとき用）
@@ -66,24 +68,31 @@ const emit = defineEmits<{
     </div>
   </div>
 
-  <div v-if="status == FACE_STATUS_INDEX.VERIFYING || status == FACE_STATUS_INDEX.DETECTED" 
-    class="w-full bg-white rounded-xl p-2 border border-slate-100">
-    <div v-if="status == FACE_STATUS_INDEX.VERIFYING" 
-      class="flex items-center gap-1 text-xs font-bold text-pink-500 mb-1">
-      <span>💬</span>
-      <span>AIアドバイス</span>
-    </div>
-    <div v-else class="flex items-center gap-2 text-xs font-bold text-pink-500 mb-1">
-      <span>✨</span>
-      <span>AIグッジョブ！</span>
-    </div>
-    <h4 class="text-sm font-bold text-slate-800 mb-1">{{ actionText }}</h4>
-    <p class="text-xs text-slate-500 leading-relaxed">{{ aiActionDetail }}</p>
+  <div v-if="isLoading" class="w-full flex flex-col items-center justify-center p-8 bg-zinc-900 rounded-xl border border-zinc-800">
+    <div class="animate-spin h-8 w-8 border-4 border-emerald-500 border-t-transparent rounded-full mb-3"></div>
+    <p class="text-sm text-zinc-400 font-medium">1アクション詳細説明生成中...</p>
   </div>
-  <div v-else class="text-center py-4 px-4 bg-neutral-600/30 rounded-xl">
-    <p class="text-sm text-neutral-500 font-medium">
-        ⚠️ 人が写っていないため、アドバイスは非表示になります。
-    </p>
+
+  <div v-else class="w-full">
+    <div v-if="status == FACE_STATUS_INDEX.VERIFYING || status == FACE_STATUS_INDEX.DETECTED" 
+      class="w-full bg-white rounded-xl p-2 border border-slate-100">
+      <div v-if="status == FACE_STATUS_INDEX.VERIFYING" 
+        class="flex items-center gap-1 text-xs font-bold text-pink-500 mb-1">
+        <span>💬</span>
+        <span>AIアドバイス</span>
+      </div>
+      <div v-else class="flex items-center gap-2 text-xs font-bold text-pink-500 mb-1">
+        <span>✨</span>
+        <span>グッジョブ！</span>
+      </div>
+      <h4 class="text-sm font-bold text-slate-800 mb-1">{{ actionText }}</h4>
+      <p class="text-xs text-slate-500 leading-relaxed">{{ aiActionDetail }}</p>
+    </div>
+    <div v-else class="text-center py-4 px-4 bg-neutral-600/30 rounded-xl">
+      <p class="text-sm text-neutral-500 font-medium">
+          ⚠️人が写っていない写真は、解析対象外です。
+      </p>
+    </div>
   </div>
 
 </template>
