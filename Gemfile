@@ -37,6 +37,8 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  gem "ruby-lsp", require: false
 end
 
 group :development do
@@ -51,3 +53,5 @@ group :test do
 end
 
 gem "vite_rails"
+gem "openai"
+gem "dotenv-rails"

@@ -85,7 +85,8 @@ const handleCapture = async () => {
         blob: capturedBlob,
         createdAt: Date.now(), 
         status: currentStatus,
-        actionText: faceStatus.value.message
+        actionText: faceStatus.value.message,
+        judgeResult: currentSnapshotJudgeResult
       }
       // 撮影結果プレビュー画面へ遷移
       router.push('/result-preview')
